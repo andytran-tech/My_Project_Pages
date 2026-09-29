@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Guide: Replacing a Laptop Battery</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .step-checkbox:checked + label {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
+
+    <!-- Sticky Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white rounded-lg shadow">
+                        <i class="fa-solid fa-laptop text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg leading-tight block text-slate-900 dark:text-white">Laptop Care</span>
+                        <span class="text-xs text-brand-600 dark:text-brand-500 font-semibold uppercase tracking-wider">Battery Replacement Guide</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#intro" class="text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Intro</a>
+                    <a href="#parts-tools" class="text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Parts & Tools</a>
+                    <a href="#disassembly" class="text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Installation</a>
+                    <a href="#verify" class="text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Test & Verify</a>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Progress Badge -->
+                    <div id="progress-container" class="hidden sm:flex items-center px-3 py-1 bg-brand-50 dark:bg-slate-700 border border-brand-100 dark:border-slate-600 rounded-full text-xs font-semibold text-brand-700 dark:text-brand-500">
+                        <i class="fa-solid fa-circle-notch animate-spin mr-1.5 text-brand-600" id="progress-spinner"></i>
+                        <span>Progress: <span id="progress-text">0%</span></span>
+                    </div>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" type="button" class="p-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-lg hidden dark:block"></i>
+                        <i class="fa-solid fa-sun text-lg block dark:hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-brand-700 text-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <span class="inline-block px-3 py-1 bg-brand-500/20 text-brand-100 border border-brand-500/30 rounded-full text-xs font-semibold uppercase tracking-widest mb-3">
+                DIY Hardware Maintenance
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+                Quick Guide: Replace a Laptop Battery
+            </h1>
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto font-light mb-6">
+                Extend your laptop's lifecycle with an easy step-by-step battery replacement walkthrough using basic tools.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3 text-xs font-medium text-slate-300">
+                <span class="flex items-center px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-700"><i class="fa-solid fa-laptop text-brand-500 mr-2"></i>Dell Inspiron Series</span>
+                <span class="flex items-center px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-700"><i class="fa-solid fa-clock text-amber-400 mr-2"></i>30–40 Minutes</span>
+                <span class="flex items-center px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-700"><i class="fa-solid fa-screwdriver-wrench text-emerald-400 mr-2"></i>Beginner Friendly</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Progress Bar -->
+    <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 sticky top-16 z-40">
+        <div id="progress-bar" class="bg-gradient-to-r from-brand-500 to-indigo-500 h-1.5 transition-all duration-300" style="width: 0%;"></div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow space-y-10">
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section id="intro" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="p-3 bg-brand-50 dark:bg-slate-700 text-brand-600 dark:text-brand-500 rounded-xl">
+                    <i class="fa-solid fa-book-open text-xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Introduction</h2>
+            </div>
+            
+            <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6 text-sm sm:text-base">
+                In this quick guide, I will show you how to easily replace a battery for a laptop. In particular, I have an old Dell Inspiron laptop which I bought back in 2017 when going to college. After so many years of heavy use, the battery life became severely degraded—draining quickly and lasting only about 30 minutes. Even though there were no signs of battery swelling or physical damage, giving it a brand new battery gives the machine a second life.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-slate-100 dark:bg-slate-900 rounded-xl p-4 border border-dashed border-slate-300 dark:border-slate-700 text-center">
+                    <div class="h-44 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center p-3 text-slate-500 dark:text-slate-400">
+                        <img src="PCH01_Images/picture1.png">
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Bottom chassis showing model information and rear screws.</p>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-900 rounded-xl p-4 border border-dashed border-slate-300 dark:border-slate-700 text-center">
+                    <div class="h-44 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center p-3 text-slate-500 dark:text-slate-400">
+                        <img src="PCH01_Images/picture2.png">
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">The laptop interface prior to replacing the degraded battery.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PARTS & TOOLS -->
+        <section id="parts-tools" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="p-3 bg-indigo-50 dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 rounded-xl">
+                    <i class="fa-solid fa-boxes-packing text-xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Parts & Tools Needed</h2>
+            </div>
+
+            <!-- Identifying Parts -->
+            <div class="mb-8">
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200 mb-3 flex items-center">
+                    <i class="fa-solid fa-magnifying-glass text-brand-600 mr-2"></i> Finding the Correct Replacement Battery
+                </h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                    There are two main methods to identify the exact battery unit required for your laptop:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Method 1: Service Tag / Serial Number</h4>
+                        <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-3">
+                            Check the bottom label of the laptop for the Service Tag or Serial Number (S/N). Enter this code into the manufacturer's support site (e.g., <a href="https://www.dell.com/support/home/" target="_blank" class="text-brand-600 hover:underline">dell.com/support</a>). Note: For older models, exact parts might no longer be listed.
+                        </p>
+                        <img src="PCH01_Images/picture3.png">
+                    </div>
+
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Method 2: Direct Disassembly (Recommended)</h4>
+                        <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-3">
+                            Open the laptop chassis directly to inspect the factory battery label. For this model, the specs are: <strong>42 Wh Li-ion Battery — Type: "WDX0R" 11.4V</strong>. You can search this model string on Amazon or eBay.
+                        </p>
+                        <img src="PCH01_Images/picture4.png">
+                    </div>
+                </div>
+
+                <!-- Purchase Card -->
+                <div class="mt-4 p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-cart-shopping text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                        <span class="text-xs sm:text-sm font-medium text-emerald-900 dark:text-emerald-200">
+                            <strong>Replacement Purchased:</strong> NinjaBatt WDX0R 42Wh Replacement (~$29.99 on Amazon)
+                            <img src="PCH01_Images/picture14.png" width="500px">
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Required Tools -->
+            <div>
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200 mb-3 flex items-center">
+                    <i class="fa-solid fa-toolbox text-indigo-600 mr-2"></i> Required Tools
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+                        <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center mb-2 text-slate-500">
+                            <img src="PCH01_Images/picture5.png" width = "100px">
+                        </div>
+                        <span class="font-bold block text-slate-800 dark:text-slate-200">Precision Screwdrivers</span>
+                        <span class="text-slate-500 text-[11px]">Small Phillips & Torx bit heads.</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+                        <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center mb-2 text-slate-500">
+                            <img src="PCH01_Images/picture6.png" width="150px">
+                        </div>
+                        <span class="font-bold block text-slate-800 dark:text-slate-200">Plastic Spudger / Card</span>
+                        <span class="text-slate-500 text-[11px]">Pry tool or old plastic credit card.</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+                        <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-col items-center justify-center mb-2 text-slate-500">
+                            <img src="PCH01_Images/picture7.png" width ="150px">
+                        </div>
+                        <span class="font-bold block text-slate-800 dark:text-slate-200">Anti-Static Wristband</span>
+                        <span class="text-slate-500 text-[11px]">Protects internal components from ESD.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: STEP-BY-STEP DISASSEMBLY & INSTALLATION -->
+        <section id="disassembly" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="p-3 bg-amber-50 dark:bg-slate-700 text-amber-500 rounded-xl">
+                        <i class="fa-solid fa-list-check text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Disassembly & Installation</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Click checkboxes to track your progress</p>
+                    </div>
+                </div>
+                <button id="reset-steps" class="text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-lg transition-colors">
+                    Reset Progress
+                </button>
+            </div>
+
+            <!-- ESD Safety Callout -->
+            <div class="mb-6 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 text-amber-900 dark:text-amber-200">
+                <div class="flex items-center space-x-2 font-bold mb-1">
+                    <i class="fa-solid fa-shield-halved text-amber-500"></i>
+                    <span>Important ESD Safety Precaution</span>
+                </div>
+                <p class="text-xs leading-relaxed">
+                    Before touching any internal electronics, strap on your anti-static wristband tightly against your bare skin. Proper direct skin contact is critical to ground static charges and protect components against ESD damage.
+                </p>
+            </div>
+
+            <!-- Steps List -->
+            <div class="space-y-6">
+
+                <!-- Step 1 -->
+                <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 transition-all">
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="step1" class="step-checkbox mt-1 h-5 w-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                        <div class="flex-1">
+                            <label for="step1" class="font-bold text-slate-800 dark:text-slate-100 cursor-pointer text-sm sm:text-base">
+                                Step 1: Remove Bottom Panel Screws
+                            </label>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                                Turn the laptop upside down. Select the matching screwdriver bit for the chassis screws around the outer edges. Gently unscrew each bolt and place them on your workspace sorted by their original positions, as screw lengths may vary.
+                            </p>
+                            <div class="mt-3 bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                <img src="PCH01_Images/picture8.jpg" width="700px">
+                                <div>Chassis Screws Layout Diagram</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 transition-all">
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="step2" class="step-checkbox mt-1 h-5 w-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                        <div class="flex-1">
+                            <label for="step2" class="font-bold text-slate-800 dark:text-slate-100 cursor-pointer text-sm sm:text-base">
+                                Step 2: Pry Off Bottom Panel & Unbolt Battery
+                            </label>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                                Insert a plastic spudger (or an old bank card) into the small gap around the laptop edge. Carefully slide it along the seam to pop the clips free. Once open, locate the 4 mounting screws holding the battery unit in place and remove them.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                    <img src="PCH01_Images/picture9.jpg">
+                                    <div>Prying Edge with Plastic Card</div>
+                                </div>
+                                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                    <img src="PCH01_Images/picture10.jpg">
+                                    <div>4 Battery Mounting Screws Highlighted</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 transition-all">
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="step3" class="step-checkbox mt-1 h-5 w-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                        <div class="flex-1">
+                            <label for="step3" class="font-bold text-slate-800 dark:text-slate-100 cursor-pointer text-sm sm:text-base">
+                                Step 3: Unplug Power Connector & Compare Batteries
+                            </label>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                                Gently disconnect the power cable harness from the motherboard, ensuring you do not pull hard on the wires. Lift out the original battery and compare it against the new unit to ensure voltage and form-factor match.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                    <img src="PCH01_Images/picture11.jpg">
+                                    <div>Disconnecting Battery Cable Plug</div>
+                                </div>
+                                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                    <img src="PCH01_Images/picture12.jpg">
+                                    <div>Side-by-Side Comparison (Old vs New)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 transition-all">
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="step4" class="step-checkbox mt-1 h-5 w-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                        <div class="flex-1">
+                            <label for="step4" class="font-bold text-slate-800 dark:text-slate-100 cursor-pointer text-sm sm:text-base">
+                                Step 4: Install New Battery & Reassemble
+                            </label>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                                Set the new battery in place, firmly attach the cable harness to the motherboard connector, re-insert the 4 battery screws, snap the back cover back onto the laptop frame, and re-tighten the bottom screws.
+                            </p>
+                            <div class="mt-3 bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                                <img src="PCH01_Images/picture13.jpg">
+                                <div>New Battery Connected Firmly</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: TEST & VERIFY -->
+        <section id="verify" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="p-3 bg-emerald-50 dark:bg-slate-700 text-emerald-500 rounded-xl">
+                    <i class="fa-solid fa-charging-station text-xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Test & Verify Operation</h2>
+            </div>
+
+            <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                Press the power button. If the laptop does not turn on immediately, don't worry—new replacement batteries frequently ship uncharged. Plug in your AC adapter to charge it briefly before powering on.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                    <img src="PCH01_Images/picture1.png">
+                    <div>Laptop Power On Test</div>
+                </div>
+                <div class="bg-slate-200 dark:bg-slate-800 rounded-lg p-3 text-center text-slate-500 text-xs">
+                    <img src="PCH01_Images/picture15.png">
+                    <div>Windows Battery Status Screen</div>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-brand-50 dark:bg-slate-900 rounded-xl border border-brand-200 dark:border-slate-700 text-center">
+                <p class="text-sm font-bold text-brand-700 dark:text-brand-400">
+                    🎉 Replacement Complete! Enjoy your restored battery performance.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 mt-10">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+            <p>© DIY Laptop Maintenance Guide[cite: 4]. Built for clean, modern web viewing with Night Mode support.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const stepCheckboxes = document.querySelectorAll('.step-checkbox');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const resetStepsBtn = document.getElementById('reset-steps');
+
+        // Dark Mode Handler
+        function initTheme() {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+
+        // Step Progress Tracker
+        function updateProgress() {
+            const totalSteps = stepCheckboxes.length;
+            let completedSteps = 0;
+
+            stepCheckboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    completedSteps++;
+                }
+                localStorage.setItem(`laptop_battery_step_${index}`, checkbox.checked);
+            });
+
+            const percentage = Math.round((completedSteps / totalSteps) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}%`;
+        }
+
+        function loadChecklistState() {
+            stepCheckboxes.forEach((checkbox, index) => {
+                const savedState = localStorage.getItem(`laptop_battery_step_${index}`);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+            });
+            updateProgress();
+        }
+
+        stepCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+
+        resetStepsBtn.addEventListener('click', () => {
+            stepCheckboxes.forEach((checkbox, index) => {
+                checkbox.checked = false;
+                localStorage.removeItem(`laptop_battery_step_${index}`);
+            });
+            updateProgress();
+        });
+
+        initTheme();
+        loadChecklistState();
+    </script>
+</body>
+</html>
