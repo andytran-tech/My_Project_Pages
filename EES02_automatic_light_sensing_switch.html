@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Light-Sensing Switch Using a MOSFET</title>
+    <style>
+        :root {
+            --bg-primary: #0b132b;
+            --bg-card: #1c2541;
+            --bg-code: #0b132b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.25);
+            --border-color: #1e293b;
+            --table-header-bg: #1c2541;
+            --table-row-alt: #0b132b;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+            --toggle-bg: #1e293b;
+            --placeholder-bg: #1c2541;
+            --placeholder-border: #38bdf8;
+            --badge-bg: rgba(255, 255, 255, 0.07);
+            --badge-border: rgba(255, 255, 255, 0.12);
+            --nav-bg: rgba(11, 19, 43, 0.85);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-color: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.15);
+            --border-color: #e2e8f0;
+            --table-header-bg: #f1f5f9;
+            --table-row-alt: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --toggle-bg: #e2e8f0;
+            --placeholder-bg: #f1f5f9;
+            --placeholder-border: #0284c7;
+            --badge-bg: rgba(0, 0, 0, 0.05);
+            --badge-border: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .brand-text .title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .brand-text .subtitle {
+            font-size: 0.75rem;
+            color: #10b981;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .progress-badge {
+            background-color: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #10b981;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle-btn {
+            background-color: var(--toggle-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.9rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Hero Banner Section */
+        .hero-banner {
+            background: radial-gradient(circle at 80% 50%, rgba(16, 185, 129, 0.15) 0%, rgba(11, 19, 43, 0) 60%),
+                        linear-gradient(180deg, #0b132b 0%, #111d38 100%);
+            padding: 4.5rem 1.5rem 4rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+        }
+
+        .category-pill {
+            display: inline-block;
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            max-width: 680px;
+            margin: 0 auto 2rem auto;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .meta-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .meta-badge {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem 0;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        p strong, li strong {
+            color: var(--text-primary);
+        }
+
+        ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .formula-box {
+            background-color: var(--bg-code);
+            border-left: 4px solid var(--accent-color);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.2rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        /* Image Styling & Placeholders */
+        .image-container {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            min-height: 200px;
+            border: 2px dashed var(--placeholder-border);
+            border-radius: 10px;
+            background-color: var(--placeholder-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .img-placeholder svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 0.5rem;
+            fill: var(--accent-color);
+        }
+
+        .img-placeholder .img-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .img-placeholder .img-code {
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: var(--bg-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent-color);
+            margin-top: 0.5rem;
+        }
+
+        .responsive-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            color: var(--text-primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--table-row-alt);
+        }
+
+        .link-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .link-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <!-- 1. Font Awesome 6 (Free CDN) -->
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+    />
+
+    
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">⚡</div>
+            <div class="brand-text">
+                <div class="title">MOSFET Circuit</div>
+                <div class="subtitle">LIGHT-SENSING SWITCH</div>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#overview">Overview & Concept</a></li>
+            <li><a href="#wiring">Diagram</a></li>
+            <li><a href="#components">Components</a></li>
+            <li><a href="#summary">Simulation</a></li>
+            <li><a href="index.html"><i class="fa-solid fa-arrow-left text-xs text-cyan-400"></i>Back</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            
+            <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+                <span id="themeIcon">☀️</span> <span id="themeText">Day</span>
+            </button>
+            
+        </div>
+    </nav>
+
+    <!-- Hero Banner Header -->
+    <header class="hero-banner" id="overview">
+        <div class="category-pill">HARDWARE DESIGN & ASSEMBLY</div>
+        <h1 class="hero-title">Automatic Light-Sensing Switch</h1>
+        <p class="hero-subtitle">
+            Build a basic high-efficiency automatic night light using an N-Channel MOSFET and Photoresistor (LDR) for minimal standby power consumption.
+        </p>
+        <div class="meta-badges">
+            <div class="meta-badge">⚡ N-Channel MOSFET</div>
+            <div class="meta-badge">💡 LDR Light Sensor</div>
+            <div class="meta-badge">⏱️ 30 - 45 Mins</div>
+            <div class="meta-badge">🎯 Beginner / Intermediate</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Project Overview -->
+        <section class="section-card">
+            <h2>⚡ Project Overview</h2>
+            <p>
+                This project details the step-by-step design, assembly, and testing of an automatic light-sensing switch using a photoresistor and MOSFET.
+            </p>
+            <p>
+                The circuit utilizes a <strong>Light Dependent Resistor (LDR)</strong> to detect ambient light, a <strong>voltage divider</strong> to translate resistance changes into a dynamic control voltage, and an <strong>N-Channel MOSFET</strong> to automatically toggle an LED load ON or OFF.
+            </p>
+        </section>
+
+        <!-- Core Technical Concepts -->
+        <section class="section-card">
+            <h2>🧠 Core Technical Concepts</h2>
+
+            <h3>1. Light Dependent Resistor (LDR)</h3>
+            <p>An LDR (Photoresistor) is a passive semiconductor component whose electrical resistance varies inversely with ambient light intensity:</p>
+            <ul>
+                <li><strong>In Bright Light:</strong> Photons strike the semiconductor material, freeing charge carriers. Resistance drops significantly down to ~500 Ω.</li>
+                <li><strong>In Darkness:</strong> Few free electrons are available. Resistance spikes up to ≥180 kΩ (or several megaohms).</li>
+            </ul>
+
+            <!-- IMAGE PLACEHOLDERS: LDR Photos -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <div class="img-placeholder">
+                        <img src="EES02_Images/pic1.jpg" height="200px">
+                    </div>
+                    <p class="image-caption">Physical Photoresistor (LDR)</p>
+                </div>
+                <div class="image-container">
+                    <div class="img-placeholder">
+                        <img src="EES02_Images/pic2.jpg" height="200px">
+                    </div>
+                    <p class="image-caption">Photoresistor Internal Structure</p>
+                </div>
+            </div>
+
+            <h3>2. The Voltage Divider</h3>
+            <p>A single photoresistor cannot output a changing voltage on its own. By placing a fixed or adjustable resistor in series with the LDR across a power supply (V<sub>CC</sub> = 9V), we create a functional voltage divider circuit.</p>
+
+            <!-- IMAGE PLACEHOLDER: Voltage Divider Circuit -->
+            <div class="image-container">
+                <div class="img-placeholder">
+                    <img src="EES02_Images/pic3.png" width="600px" >
+                </div>
+                <p class="image-caption">Voltage Divider Schematic</p>
+            </div>
+
+            <div class="formula-box">
+                V<sub>out</sub> = V<sub>CC</sub> × [ R<sub>LDR</sub> / (R<sub>1</sub> + R<sub>LDR</sub>) ]
+            </div>
+
+            <p><strong>Voltage Divider Behavior:</strong></p>
+            <ul>
+                <li><strong>Daylight (R<sub>LDR</sub> ≈ 506 Ω):</strong> Low resistance pulls V<sub>out</sub> close to Ground (0V).
+                    <br><em>V<sub>out</sub> = 9V × (506 Ω / (100 kΩ + 506 Ω)) ≈ 0.045 V</em>
+                </li>
+                <li><strong>Darkness (R<sub>LDR</sub> ≥ 180 kΩ):</strong> High resistance allows V<sub>out</sub> to rise toward V<sub>CC</sub>.
+                    <br><em>V<sub>out</sub> = 9V × (180 kΩ / (100 kΩ + 180 kΩ)) = 5.78 V</em>
+                </li>
+            </ul>
+
+            <h3>3. The N-Channel MOSFET Switch</h3>
+            <p>An N-Channel MOSFET (e.g., BS170 or 2N7000) acts as an electronic switch controlled purely by voltage applied to its Gate (G) pin relative to its Source (S) pin (V<sub>GS</sub>).</p>
+
+            <!-- IMAGE PLACEHOLDER: MOSFET Pinout -->
+            <div class="image-container">
+                <div class="img-placeholder">
+                    <img src="EES02_Images/pic4.png">
+                </div>
+                <p class="image-caption">N-Channel MOSFET Pin Configuration</p>
+            </div>
+
+            <ul>
+                <li><strong>Gate Input Pin (G):</strong> Draws virtually zero current (R<sub>Gate</sub> ≈ 10<sup>12</sup> Ω), acting like a tiny capacitive voltage sensor .</li>
+                <li><strong>Threshold Voltage (V<sub>GS(th)</sub>):</strong> The critical voltage level required to turn the switch ON (typically 1.2 V – 2.1 V).</li>
+            </ul>
+
+            <p><strong>Operating States:</strong></p>
+            <ul>
+                <li><strong>OFF State (Daylight):</strong> V<sub>out</sub> ≈ 0.045V. Since V<sub>GS</sub> &lt; V<sub>GS(th)</sub>, no conductive channel forms. The MOSFET acts as an open switch (Cutoff Mode).</li>
+                <li><strong>ON State (Darkness):</strong> V<sub>out</sub> ≈ 5.78V. Since V<sub>GS</sub> &gt; V<sub>GS(th)</sub>, a conductive channel opens (R<sub>DS(on)</sub> ≤ 2 Ω). The MOSFET acts as a closed switch (Ohmic Mode), completing the ground path for the LED.</li>
+            </ul>
+        </section>
+
+        <!-- Circuit Schematic -->
+        <section class="section-card" id="wiring">
+            <h2>📐 Complete Circuit Diagram</h2>
+            
+            <!-- IMAGE PLACEHOLDER: Complete Circuit Schematic -->
+            <div class="image-container">
+                <div class="img-placeholder" style="min-height: 260px;">
+                    <img src="EES02_Images/pic5.png">
+                </div>
+                <p class="image-caption">Full Circuit Schematic Diagram</p>
+            </div>
+        </section>
+
+        <!-- Components List -->
+        <section class="section-card" id="components">
+            <h2>🛠️ Circuit Components</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Component</th>
+                        <th>Function in Circuit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>N-Channel MOSFET</strong> (BS170 / 2N7000)</td>
+                        <td>Electronic switch controlling the LED load</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Photoresistor</strong> (5mm LDR)</td>
+                        <td>Senses ambient light levels</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>100 kΩ Resistor</strong></td>
+                        <td>Forms top half of voltage divider / gate current limiting</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>470 Ω Resistor</strong></td>
+                        <td>Limits current through the LED to prevent burnout</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Standard 5mm LED</strong></td>
+                        <td>Visual output indicator (lights up in darkness)</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>9V Battery & Snap Connector</strong></td>
+                        <td>Main DC power supply</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Solderless Breadboard & Jumpers</strong></td>
+                        <td>Circuit assembly platform</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Simulation & Breadboard Layouts -->
+        <section class="section-card" id="diagnostics">
+            <h2>🖥️ Simulation & Breadboard Layout</h2>
+            <p>
+                This circuit can be built and interactively tested in <strong>Tinkercad Circuits</strong>. During daytime conditions, the LED remains off; when darkness is simulated, the LED automatically turns on.
+            </p>
+
+            <!-- IMAGE PLACEHOLDERS: Tinkercad Layouts -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <div class="img-placeholder">
+                        <img src="EES02_Images/pic6.png" width="350px">
+                    </div>
+                    <p class="image-caption">Daytime State (LED Off)</p>
+                </div>
+                <div class="image-container">
+                    <div class="img-placeholder">
+                        <img src="EES02_Images/pic7.gif" width="350px">
+                    </div>
+                    <p class="image-caption">Nighttime State (LED On)</p>
+                </div>
+            </div>
+
+            <p id="summary">
+                <strong>Practical Applications:</strong> This core circuit concept serves as the base for dusk-to-dawn outdoor lighting, automatic nightlights, solar street lamp controllers, and ambient light sensors.
+            </p>
+            <a href="https://www.tinkercad.com/things/fxdXOadeLEI-automatic-light-sensing-swtich" target="_blank" class="link-button">
+                🚀 Open Interactive Tinkercad Simulation
+            </a>
+        </section>
+
+        <footer>
+            <p>Automatic Light-Sensing Switch Documentation • Interactive Day & Night Web Guide</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            const currentTheme = htmlTag.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlTag.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (newTheme === 'light') {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = '';
+            } else {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>
