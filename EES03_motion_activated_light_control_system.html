@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motion-Activated 120V Light Control System</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    /* Theme Transition Smoothness */
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .glass-card {
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Custom glowing animation for high-voltage state */
+    @keyframes bulbGlow {
+      0%, 100% { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9)) drop-shadow(0 0 35px rgba(245, 158, 11, 0.6)); }
+      50% { filter: drop-shadow(0 0 25px rgba(251, 191, 36, 1)) drop-shadow(0 0 50px rgba(245, 158, 11, 0.8)); }
+    }
+    
+    .active-bulb {
+      animation: bulbGlow 2s infinite ease-in-out;
+    }
+  </style>
+
+  <!-- 1. Font Awesome 6 (Free CDN) -->
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+    />
+
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans transition-colors duration-300">
+
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Brand Logo -->
+        <div class="flex items-center space-x-3">
+          <div class="p-2 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg border border-amber-500/30">
+            <i data-lucide="zap" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-slate-900 via-amber-600 to-amber-500 dark:from-white dark:via-amber-200 dark:to-amber-400 bg-clip-text text-transparent">EES03 Light Control</span>
+            <span class="hidden sm:inline-block text-xs font-semibold uppercase px-2 py-0.5 rounded ml-2 bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">120V AC Hybrid</span>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="#overview" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Overview</a>
+          <a href="#schema" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Schematic</a>
+          <a href="#components" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Components</a>
+          <a href="#wiring" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Wiring</a>
+          <a href="#operation" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Operation</a>
+          <a href="#simulation" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Interactive Demo</a>
+          <a href="index.html" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors"><i class="fa-solid fa-arrow-left text-xs text-cyan-400"></i> Back</a>
+        </nav>
+
+        <!-- Right Side Utilities (Theme Toggle & External Link) -->
+        <div class="flex items-center space-x-3">
+          <!-- Theme Toggle Switch -->
+          <button id="themeToggle" type="button" aria-label="Toggle theme" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center">
+            <i id="sunIcon" data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
+            <i id="moonIcon" data-lucide="moon" class="w-5 h-5 block dark:hidden text-indigo-600"></i>
+          </button>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Navigation -->
+      <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2 text-sm font-medium border-t border-slate-200 dark:border-slate-800 pt-3">
+        <a href="#overview" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Overview</a>
+        <a href="#schema" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Schematic</a>
+        <a href="#components" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Components</a>
+        <a href="#wiring" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Wiring Guide</a>
+        <a href="#operation" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Circuit Operation</a>
+        <a href="#simulation" class="block px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">Interactive Simulation</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-slate-100 to-slate-200 dark:from-slate-900 dark:via-slate-900 dark:to-amber-950/30 border border-slate-200 dark:border-slate-800 p-8 sm:p-12 shadow-xl transition-colors duration-300">
+      <div class="relative z-10 max-w-3xl space-y-6">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          <span>Low-Voltage Logic Interface to High-Voltage Mains</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+          Motion-Activated <span class="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 dark:from-amber-400 dark:to-yellow-300 bg-clip-text text-transparent">120V Light Control</span> System
+        </h1>
+
+        <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+          An isolated hybrid control circuit engineered to driver a 120V AC incandescent/LED lamp using low-power 4.5V DC passive infrared (PIR) sensing logic, transistor switching driver stage, inductive transient flyback suppression, and electromagnetic relay decoupling.
+        </p>
+
+        <!-- Feature Badges -->
+        <div class="flex flex-wrap gap-3 pt-2">
+          <span class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
+            <i data-lucide="cpu" class="w-4 h-4 text-sky-500"></i>
+            <span>4.5V DC Logic Stage</span>
+          </span>
+          <span class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
+            <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+            <span>120V AC Load Mains</span>
+          </span>
+          <span class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
+            <i data-lucide="radio" class="w-4 h-4 text-emerald-500"></i>
+            <span>PIR Infrared Motion</span>
+          </span>
+          <span class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-500"></i>
+            <span>Flyback Protection</span>
+          </span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 pt-4">
+          <a href="#simulation" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/25 transition-all flex items-center space-x-2">
+            <i data-lucide="play-circle" class="w-5 h-5"></i>
+            <span>Launch Live Simulation</span>
+          </a>
+          <a href="#schema" class="px-5 py-3 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-sm font-semibold transition-all flex items-center space-x-2">
+            <i data-lucide="file-code" class="w-5 h-5"></i>
+            <span>Inspect Schematic</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Glowing Accent Visual Background -->
+      <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-amber-500/10 dark:bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    </section>
+
+    <!-- High Voltage Warning Banner -->
+    <div class="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-900 dark:text-rose-200 flex items-start space-x-4 shadow-sm">
+      <div class="p-2.5 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-xl shrink-0 mt-0.5">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div class="space-y-1">
+        <h3 class="font-bold text-sm sm:text-base flex items-center space-x-2 text-rose-700 dark:text-rose-300">
+          <span>HIGH-VOLTAGE SAFETY WARNING</span>
+        </h3>
+        <p class="text-xs sm:text-sm text-rose-800/80 dark:text-rose-200/80 leading-relaxed">
+          Working with 120V AC mains electricity carries severe shock and fire hazards. Always disconnect mains power before touching high-voltage connections. Ensure proper wire insulation, heat-shrink tubing, or relay enclosures. Proceed at your own risk and follow local electrical codes!.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section: Overview -->
+    <section id="overview" class="space-y-6">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <i data-lucide="info" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">System Architecture & Overview</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
+            01
+          </div>
+          <h3 class="font-semibold text-slate-900 dark:text-white">DC Motion Detection</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The Passive Infrared (PIR) sensor monitors ambient thermal radiation changes. Upon detecting motion, it outputs a HIGH signal (~3.3V to 5V DC) on its signal terminal.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+            02
+          </div>
+          <h3 class="font-semibold text-slate-900 dark:text-white">Transistor Driver & Relay Coil</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Because PIR sensor pins cannot directly drive current-heavy coils, an NPN BJT transistor (2N3904) operates as a low-side electronic switch to energize the 5V relay coil safely.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+            03
+          </div>
+          <h3 class="font-semibold text-slate-900 dark:text-white">120V AC Mains Switching</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The electromechanical relay contacts physically close, completing the 120V AC circuit path and powering the high-voltage lamp while maintaining electrical isolation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Schematic Diagram -->
+    <section id="schema" class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Circuit Schematic & Flow Diagram</h2>
+        </div>
+        
+      </div>
+
+        <!-- Diagram picture -->
+      <div class="w-full overflow-x-auto bg-slate-100 dark:bg-slate-950 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-center">
+          <img src="EES03_Images/pic1.png">
+      </div>
+    </section>
+
+    <!-- Section: Component Breakdown Table -->
+    <section id="components" class="space-y-6">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <i data-lucide="layers" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Bill of Materials & Component Specs</h2>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <table class="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+          <thead class="bg-slate-100 dark:bg-slate-800/60 text-slate-900 dark:text-white uppercase font-bold text-xs tracking-wider border-b border-slate-200 dark:border-slate-800">
+            <tr>
+              <th class="px-6 py-4">Component</th>
+              <th class="px-6 py-4">Designation</th>
+              <th class="px-6 py-4">Rating / Value</th>
+              <th class="px-6 py-4">Primary Technical Role</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="eye" class="w-4 h-4 text-emerald-500"></i>
+                <span>PIR Motion Sensor</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">PIR1 (HC-SR501)</td>
+              <td class="px-6 py-4">4.5V - 12V DC Input</td>
+              <td class="px-6 py-4">Detects infrared radiation shifts and outputs a logic HIGH signal.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="cpu" class="w-4 h-4 text-indigo-500"></i>
+                <span>NPN BJT Transistor</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">Q1 (2N3904 / 2N2222)</td>
+              <td class="px-6 py-4">Vce=40V, Ic=200mA</td>
+              <td class="px-6 py-4">Low-side driver switch that energizes the 5V relay coil from logic output.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="minus" class="w-4 h-4 text-amber-500"></i>
+                <span>Base Resistor</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">R1</td>
+              <td class="px-6 py-4">1 kΩ (1/4W)</td>
+              <td class="px-6 py-4">Limits current entering the transistor base, protecting PIR output pin.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="arrow-left-right" class="w-4 h-4 text-rose-500"></i>
+                <span>Flyback Diode</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">D1 (1N4001)</td>
+              <td class="px-6 py-4">50V, 1A Rectifier</td>
+              <td class="px-6 py-4">Suppresses inductive high-voltage reverse spikes when relay coil collapses.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="toggle-right" class="w-4 h-4 text-purple-500"></i>
+                <span>Electromechanical Relay</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">K1 (LU-5-R / SPDT)</td>
+              <td class="px-6 py-4">5V Coil / 120V AC 10A</td>
+              <td class="px-6 py-4">Galvanically isolates DC logic from switching high-voltage AC mains line.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="sun" class="w-4 h-4 text-yellow-500"></i>
+                <span>AC Load (Light Bulb)</span>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">LAMP1</td>
+              <td class="px-6 py-4">120V AC / 60W</td>
+              <td class="px-6 py-4">High-voltage illumination target switched ON via relay NO contacts.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section: Step-by-Step Wiring Guide -->
+    <section id="wiring" class="space-y-6">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <i data-lucide="workflow" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Step-by-Step Circuit Assembly Guide</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2.5 py-1 rounded bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-800">STEP 1</span>
+            <i data-lucide="battery-charging" class="w-5 h-5 text-sky-500"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 dark:text-white">1. Establish Low-Voltage DC Power Rails</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Connect the 4.5V DC battery pack positive terminal (+) to the red breadboard bus line and the negative (-) terminal to the black common ground rail line.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">STEP 2</span>
+            <i data-lucide="eye" class="w-5 h-5 text-emerald-500"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 dark:text-white">2. Connect PIR Sensor Terminals</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Wire VCC pin on PIR to +4.5V rail, GND pin to Ground rail, and run the center OUT signal pin to one end of the 1kΩ current-limiting resistor.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2.5 py-1 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800">STEP 3</span>
+            <i data-lucide="cpu" class="w-5 h-5 text-indigo-500"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 dark:text-white">3. Configure NPN Transistor Switch Stage</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Attach the other side of 1kΩ resistor to the Base pin of 2N3904. Connect Emitter directly to Ground. Connect Collector to relay coil pin terminal.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2.5 py-1 rounded bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800">STEP 4</span>
+            <i data-lucide="shield" class="w-5 h-5 text-rose-500"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 dark:text-white">4. Install Relay & Flyback Diode</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Connect 1N4001 diode in <strong>reverse bias</strong> directly across relay coil pins (Cathode striped side to +4.5V, Anode to Transistor Collector).
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full overflow-x-auto bg-slate-100 dark:bg-slate-950 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-center">
+          <img src="EES03_Images/pic2.png">
+      </div>
+
+    </section>
+
+    <!-- Section: Interactive Operation Walkthrough -->
+    <section id="operation" class="space-y-6">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <i data-lucide="sliders" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Circuit Operation Walkthrough</h2>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          Select operational stages below to highlight how signals propagate sequentially from thermal PIR activation to high-voltage lamp lighting:
+        </p>
+
+        <!-- Operation Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="operationTabs">
+          <button data-op="1" class="op-tab-btn active p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-amber-500 text-slate-950 border-amber-500 font-bold">1. Motion Detected</button>
+          <button data-op="2" class="op-tab-btn p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">2. Base Current</button>
+          <button data-op="3" class="op-tab-btn p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">3. Transistor Active</button>
+          <button data-op="4" class="op-tab-btn p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">4. Relay Switch</button>
+          <button data-op="5" class="op-tab-btn p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">5. Flyback Guard</button>
+        </div>
+
+        <!-- Op Card Content Display -->
+        <div id="opContentCard" class="p-6 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3 transition-all">
+          <h3 id="opTitle" class="text-base font-bold text-amber-600 dark:text-amber-400">Stage 1: Infrared Radiation Detection</h3>
+          <p id="opBody" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            When a human body or thermal emitter moves across the PIR fresnel lens field, pyroelectric elements generate a differential voltage spike. The internal comparator triggers the OUT pin to transition from LOW (0V) to HIGH (~3.3V).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Interactive Simulation Demo -->
+    <section id="simulation" class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <i data-lucide="play" class="w-5 h-5"></i>
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Interactive Circuit Simulator</h2>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center space-x-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Live Engine Active</span>
+        </span>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg space-y-8">
+        
+        <!-- Interactive Controls -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+          <div class="flex items-center space-x-3">
+            <span class="font-bold text-sm text-slate-800 dark:text-slate-200">Simulated Motion Sensor State:</span>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <button id="btnMotionOff" class="px-4 py-2 rounded-lg font-bold text-xs transition-all bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-400 dark:border-slate-600">
+              IDLE (No Motion)
+            </button>
+            <button id="btnMotionOn" class="px-4 py-2 rounded-lg font-bold text-xs transition-all bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
+              TRIGGER MOTION
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Circuit Status Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- PIR Status Card -->
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">PIR Logic Output</span>
+              <i data-lucide="radio" class="w-4 h-4 text-emerald-500"></i>
+            </div>
+            <div id="simPirVal" class="text-2xl font-mono font-bold text-slate-400">LOW (0.0V)</div>
+            <p class="text-xs text-slate-500">Base drive current: <span id="simIb" class="font-mono text-slate-700 dark:text-slate-300">0.00 mA</span></p>
+          </div>
+
+          <!-- Relay Status Card -->
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Relay Coil State</span>
+              <i data-lucide="toggle-right" class="w-4 h-4 text-purple-500"></i>
+            </div>
+            <div id="simRelayVal" class="text-2xl font-mono font-bold text-slate-400">DE-ENERGIZED</div>
+            <p class="text-xs text-slate-500">Coil Current: <span id="simIcoil" class="font-mono text-slate-700 dark:text-slate-300">0.0 mA</span></p>
+          </div>
+
+          <!-- Light Bulb Visual Display -->
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col items-center justify-center text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider w-full text-left">120V Lamp Output</span>
+            
+            <div id="bulbIconContainer" class="p-4 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-400 transition-all duration-300 my-2">
+              <i data-lucide="lightbulb" class="w-10 h-10"></i>
+            </div>
+
+            <div id="simBulbState" class="text-base font-bold text-slate-500">OFF (0V AC)</div>
+          </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <img src="EES03_Images/pic3.png">
+          <img src="EES03_Images/pic4.png">
+        </div>  
+
+        <!-- Embedded Tinkercad Direct Button Banner -->
+        <div class="p-6 rounded-xl bg-gradient-to-r from-amber-500/10 via-slate-100 to-slate-200 dark:from-amber-950/20 dark:via-slate-900 dark:to-slate-900 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="space-y-1 text-center sm:text-left">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Experience Full Interactive SPICE Simulation in Tinkercad</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400">Run oscilloscope traces, probe node voltages, and test component values directly on Tinkercad Circuits.</p>
+          </div>
+          <a href="https://www.tinkercad.com/things/55Bj1ZRchmK-motion-activated-120v-light-control-system" target="_blank" rel="noopener noreferrer" class="shrink-0 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-all flex items-center space-x-2 shadow-md">
+            <span>Open Tinkercad Workspace</span>
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>© EES03 Motion Light Control Project. Designed for clean low/high voltage hybrid circuit documentation.</p>
+      <div class="flex items-center space-x-4">
+        <a href="#overview" class="hover:underline">Overview</a>
+        <a href="#schema" class="hover:underline">Schematic</a>
+        <a href="#simulation" class="hover:underline">Simulation</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Theme Engine and Interactive Logic -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // -------------------------------------------------------------
+    // Theme Switcher Logic (Dark / Day Mode)
+    // -------------------------------------------------------------
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+
+    // Check localStorage or default to system/dark mode
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      htmlEl.classList.remove('dark');
+    } else {
+      htmlEl.classList.add('dark');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlEl.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // -------------------------------------------------------------
+    // Interactive Operation Walkthrough Data
+    // -------------------------------------------------------------
+    const opData = {
+      1: {
+        title: "Stage 1: Infrared Motion Detection",
+        text: "When warm bodies enter the PIR sensor's active zone, internal pyroelectric sensors output a HIGH signal logic level (~3.3V) at the OUT signal pin."
+      },
+      2: {
+        title: "Stage 2: Current Limiting Base Drive",
+        text: "The HIGH logic output flows through resistor R1 (1kΩ). R1 restricts base current to roughly 2.6mA, keeping the PIR sensor pin operating well within safe thermal parameters."
+      },
+      3: {
+        title: "Stage 3: NPN Low-Side Transistor Switching",
+        text: "Base current turns transistor Q1 (2N3904) into saturation mode (Vce ≈ 0.2V). Collector pulls down toward 0V ground, creating a complete current path through the 5V relay coil."
+      },
+      4: {
+        title: "Stage 4: Galvanic Electromagnetic Relay Switch",
+        text: "As current energizes the relay coil, a magnetic field pulls the internal switch contact from NO (Normally Open) to COM (Common). This closes the 120V AC loop and lights the lamp."
+      },
+      5: {
+        title: "Stage 5: Flyback Inductive Transient Protection",
+        text: "When PIR motion ceases and Q1 turns off, the relay coil magnetic field collapses instantly, attempting to generate a reverse high-voltage kickback spike. Diode D1 safely redirects and dissipates this reverse transient energy."
+      }
+    };
+
+    const opTabs = document.querySelectorAll('.op-tab-btn');
+    const opTitle = document.getElementById('opTitle');
+    const opBody = document.getElementById('opBody');
+
+    opTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const id = tab.getAttribute('data-op');
+        
+        // Update active tab styles
+        opTabs.forEach(t => {
+          t.className = "op-tab-btn p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700";
+        });
+        tab.className = "op-tab-btn active p-3 rounded-xl border text-xs font-semibold text-center transition-all bg-amber-500 text-slate-950 border-amber-500 font-bold";
+
+        // Update content
+        opTitle.textContent = opData[id].title;
+        opBody.textContent = opData[id].text;
+      });
+    });
+
+    // -------------------------------------------------------------
+    // Interactive Circuit Simulation Demo Engine
+    // -------------------------------------------------------------
+    const btnMotionOff = document.getElementById('btnMotionOff');
+    const btnMotionOn = document.getElementById('btnMotionOn');
+
+    const simPirVal = document.getElementById('simPirVal');
+    const simIb = document.getElementById('simIb');
+    const simRelayVal = document.getElementById('simRelayVal');
+    const simIcoil = document.getElementById('simIcoil');
+    const bulbIconContainer = document.getElementById('bulbIconContainer');
+    const simBulbState = document.getElementById('simBulbState');
+
+    function setSimState(motionActive) {
+      if (motionActive) {
+        // Active Motion State
+        btnMotionOn.className = "px-4 py-2 rounded-lg font-bold text-xs transition-all bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105";
+        btnMotionOff.className = "px-4 py-2 rounded-lg font-bold text-xs transition-all bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 opacity-70";
+
+        simPirVal.textContent = "HIGH (3.3V)";
+        simPirVal.className = "text-2xl font-mono font-bold text-emerald-600 dark:text-emerald-400";
+        simIb.textContent = "2.60 mA";
+
+        simRelayVal.textContent = "ENERGIZED (CLOSED)";
+        simRelayVal.className = "text-2xl font-mono font-bold text-purple-600 dark:text-purple-400";
+        simIcoil.textContent = "71.4 mA";
+
+        bulbIconContainer.className = "p-4 rounded-full bg-amber-500 text-slate-950 active-bulb my-2 transition-all duration-300";
+        simBulbState.textContent = "ON (120V AC ILLUMINATED)";
+        simBulbState.className = "text-base font-bold text-amber-600 dark:text-amber-400";
+      } else {
+        // Idle State
+        btnMotionOff.className = "px-4 py-2 rounded-lg font-bold text-xs transition-all bg-slate-300 dark:bg-slate-700 text-slate-900 dark:text-white border border-slate-400 dark:border-slate-600 font-bold scale-105";
+        btnMotionOn.className = "px-4 py-2 rounded-lg font-bold text-xs transition-all bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 opacity-70";
+
+        simPirVal.textContent = "LOW (0.0V)";
+        simPirVal.className = "text-2xl font-mono font-bold text-slate-400";
+        simIb.textContent = "0.00 mA";
+
+        simRelayVal.textContent = "DE-ENERGIZED";
+        simRelayVal.className = "text-2xl font-mono font-bold text-slate-400";
+        simIcoil.textContent = "0.0 mA";
+
+        bulbIconContainer.className = "p-4 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-400 my-2 transition-all duration-300";
+        simBulbState.textContent = "OFF (0V AC)";
+        simBulbState.className = "text-base font-bold text-slate-500";
+      }
+    }
+
+    btnMotionOff.addEventListener('click', () => setSimState(false));
+    btnMotionOn.addEventListener('click', () => setSimState(true));
+
+    // Default to Idle state
+    setSimState(false);
+  </script>
+</body>
+</html>
