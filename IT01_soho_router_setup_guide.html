@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide: Upgrading & Setting Up a SOHO Wi-Fi Router</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        // Inline theme setup script to prevent flash of unstyled content
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+                        <i class="fa-solid font-bold fa-wifi text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-slate-900 dark:text-white text-lg leading-tight block">SOHO Tech Guide</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Wi-Fi 7 Router Upgrade</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+                    <a href="#overview" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Overview</a>
+                    <a href="#wifi7" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Wi-Fi 7 Tech</a>
+                    <a href="#specs" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Comparison</a>
+                    <a href="#hardware" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Hardware</a>
+                    <a href="#installation" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Installation</a>
+                    <a href="#setup" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Setup</a>
+                    <a href="#results" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Speed Results</a>
+                    <a href="index.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"><i class="fa-solid fa-arrow-left text-xs text-cyan-400"></i>Back</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <!-- Dark/Night Theme Toggle Button -->
+                    <button id="theme-toggle" aria-label="Toggle theme" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                        <i id="theme-toggle-dark-icon" class="fa-solid fa-moon text-lg hidden"></i>
+                        <i id="theme-toggle-light-icon" class="fa-solid fa-sun text-lg text-amber-400 hidden"></i>
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar Table of Contents (Desktop Sticky) -->
+            <aside class="hidden lg:block lg:col-span-3">
+                <div class="sticky top-24 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4">Table of Contents</h3>
+                    <ul class="space-y-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                        <li>
+                            <a href="#overview" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-circle-info text-slate-400 w-4"></i> Project Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#wifi7" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-bolt text-slate-400 w-4"></i> Wi-Fi 7 Benefits
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#specs" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-table text-slate-400 w-4"></i> Generational Matrix
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#hardware" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-microchip text-slate-400 w-4"></i> Selected Hardware
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#installation" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-screwdriver-wrench text-slate-400 w-4"></i> Wall Mount Setup
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#setup" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-sliders text-slate-400 w-4"></i> Configuration Guide
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#results" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+                                <i class="fa-solid fa-gauge-high text-slate-400 w-4"></i> Speed Benchmarks
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Quick Summary Box -->
+                    <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 bg-brand-50/50 dark:bg-brand-950/30 p-4 rounded-xl border-brand-100 dark:border-brand-900/50">
+                        <div class="text-xs font-semibold text-brand-700 dark:text-brand-400 uppercase tracking-wider mb-1">Key Gain</div>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white">+105.6 <span class="text-xs font-normal text-slate-600 dark:text-slate-400">Mbps</span></p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Download boost after upgrading to Wi-Fi 7 router.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="lg:col-span-9 space-y-10">
+
+                <!-- Section 1: Hero Header / Project Overview -->
+                <section id="overview" class="bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-brand-100 border border-white/10 mb-6">
+                            <i class="fa-solid fa-house-signal"></i> SOHO Infrastructure Project #IT01
+                        </div>
+                        
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+                            Upgrading & Setting Up a SOHO Router Wi-Fi
+                        </h1>
+                        
+                        <p class="mt-4 text-slate-300 text-base sm:text-lg leading-relaxed max-w-3xl">
+                            A complete step-by-step documentation detailing the installation, wall mounting, mobile/web configuration, and performance verification of a next-generation Wi-Fi 7 small office/home office router.
+                        </p>
+
+                        <!-- Project Highlights Pill Grid -->
+                        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/10 text-xs sm:text-sm">
+                            <div>
+                                <span class="text-slate-400 block text-xs">Target Tech</span>
+                                <span class="font-bold text-white text-base">Wi-Fi 7 (802.11be)</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-xs">Hardware</span>
+                                <span class="font-bold text-white text-base">Archer BE230</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-xs">Total Cost</span>
+                                <span class="font-bold text-emerald-400 text-base">$77 + Tax</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-xs">Performance Gain</span>
+                                <span class="font-bold text-brand-100 text-base">+25.2% Speed</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Purpose Card -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-brand-600 dark:text-brand-400"></i> Purpose of the Project
+                    </h2>
+                    <p class="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">
+                        In this project, I demonstrate how to physically install and configure a modern SOHO (Small Office/Home Office) Wi-Fi router. The primary driver for upgrading the existing router wasn't equipment failure, but rather the desire to leverage next-generation <strong class="text-slate-900 dark:text-white">Wi-Fi 7 (802.11be) technology</strong>, ultra-low latency capabilities, and advanced network management features to future-proof my home network.
+                    </p>
+                </div>
+
+                <!-- Section 2: Wi-Fi 7 Key Benefits -->
+                <section id="wifi7" class="space-y-6">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Key Benefits of Wi-Fi 7 (802.11be)</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Why upgrading to 802.11be delivers a paradigm shift in wireless performance.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Feature 1 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-md transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold mb-4">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-2">Multi-Link Operation (MLO)</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Allows a device to transmit and receive data simultaneously across multiple frequency bands (2.4 GHz, 5 GHz, and 6 GHz) for drastically increased throughput.
+                            </p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-md transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold mb-4">
+                                <i class="fa-solid fa-gauge"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-2">Ultra-Low Latency</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Cuts wireless latency down to sub-5 milliseconds—representing an <strong class="text-slate-800 dark:text-slate-100">80%+ reduction</strong> compared to Wi-Fi 6 technology.
+                            </p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-md transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold mb-4">
+                                <i class="fa-solid fa-expand"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-2">320 MHz Channel Width</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Doubles maximum channel bandwidth from 160 MHz to 320 MHz on the 6 GHz spectrum, enabling ultra-wide data highways.
+                            </p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-md transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold mb-4">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-2">4K-QAM (4096-QAM)</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Increases data modulation density from 1024-QAM to 4096-QAM, delivering <strong class="text-slate-800 dark:text-slate-100">20% more data per symbol</strong> for higher peak speeds.
+                            </p>
+                        </div>
+
+                        <!-- Feature 5 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-md transition-all md:col-span-2 lg:col-span-2">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold mb-4">
+                                <i class="fa-solid fa-scissors"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-2">Preamble Puncturing & Multi-RUs</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Allows the router to "slice around" channel interference. Instead of blocking an entire wide channel when interference is detected, it punctures out only the affected frequency portion while utilizing the rest.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3: Wi-Fi Comparison Table -->
+                <section id="specs" class="space-y-4">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Wi-Fi 7 vs. Older Generations</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Specification matrix across wireless standards.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                                    <tr>
+                                        <th class="py-4 px-6">Specification</th>
+                                        <th class="py-4 px-6">Wi-Fi 5 (802.11ac)</th>
+                                        <th class="py-4 px-6">Wi-Fi 6 / 6E (802.11ax)</th>
+                                        <th class="py-4 px-6 bg-brand-50/50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 font-bold border-l border-brand-100 dark:border-brand-900/50">
+                                            Wi-Fi 7 (802.11be)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="py-4 px-6 font-semibold text-slate-900 dark:text-white">Max Theoretical Speed</td>
+                                        <td class="py-4 px-6">3.5 Gbps</td>
+                                        <td class="py-4 px-6">9.6 Gbps</td>
+                                        <td class="py-4 px-6 bg-brand-50/20 dark:bg-brand-950/20 font-bold text-brand-700 dark:text-brand-400 border-l border-brand-100 dark:border-brand-900/50">Up to 46 Gbps</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="py-4 px-6 font-semibold text-slate-900 dark:text-white">Channel Bandwidth</td>
+                                        <td class="py-4 px-6">Up to 160 MHz</td>
+                                        <td class="py-4 px-6">Up to 160 MHz</td>
+                                        <td class="py-4 px-6 bg-brand-50/20 dark:bg-brand-950/20 font-bold text-brand-700 dark:text-brand-400 border-l border-brand-100 dark:border-brand-900/50">Up to 320 MHz</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="py-4 px-6 font-semibold text-slate-900 dark:text-white">Modulation</td>
+                                        <td class="py-4 px-6">256-QAM</td>
+                                        <td class="py-4 px-6">1024-QAM</td>
+                                        <td class="py-4 px-6 bg-brand-50/20 dark:bg-brand-950/20 font-bold text-brand-700 dark:text-brand-400 border-l border-brand-100 dark:border-brand-900/50">4096-QAM (4K-QAM)</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="py-4 px-6 font-semibold text-slate-900 dark:text-white">Multi-Band Aggregation</td>
+                                        <td class="py-4 px-6 text-slate-400 dark:text-slate-500">None</td>
+                                        <td class="py-4 px-6 text-slate-400 dark:text-slate-500">None</td>
+                                        <td class="py-4 px-6 bg-brand-50/20 dark:bg-brand-950/20 font-bold text-brand-700 dark:text-brand-400 border-l border-brand-100 dark:border-brand-900/50">MLO (Simultaneous Bands)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: Selected Hardware -->
+                <section id="hardware" class="space-y-6">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Parts Used for the Project</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Selected hardware unit and key specs.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm transition-colors duration-300">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <!-- Hardware Description -->
+                            <div class="md:col-span-7 space-y-4">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 rounded-full text-xs font-bold border border-amber-200 dark:border-amber-800/60">
+                                    <i class="fa-solid fa-tag"></i> Deal Purchase: $77 + Tax (Amazon)
+                                </div>
+                                
+                                <h3 class="text-2xl font-black text-slate-900 dark:text-white">
+                                    TP-Link Archer BE230
+                                </h3>
+                                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">BE3600 Dual-Band Wi-Fi 7 Router</p>
+                                
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Selected for its budget-friendly price point without sacrificing cutting-edge Wi-Fi 7 capabilities and multi-gigabit wired backhaul option.
+                                </p>
+
+                                <div class="space-y-2 pt-2">
+                                    <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Key Hardware Features</h4>
+                                    <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                                        <li class="flex items-start gap-2.5">
+                                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                                            <span><strong>3.6 Gbps Dual-Band Wi-Fi 7:</strong> Fluent 4K/8K streaming, AR/VR gaming, and rapid downloads.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2.5">
+                                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                                            <span><strong>2× 2.5G Ports:</strong> 1× 2.5 Gbps WAN port + 1× 2.5 Gbps LAN port for multi-gig connectivity.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2.5">
+                                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                                            <span><strong>3× 1 Gbps LAN Ports:</strong> Reliable wired connections for local network devices.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2.5">
+                                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                                            <span><strong>USB 3.0 Port:</strong> Enables fast private cloud and local network storage setup.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2.5">
+                                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                                            <span><strong>4× External Antennas & Beamforming:</strong> Maximized physical range and directed coverage.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Hardware Visual Graphic -->
+                            <div class="md:col-span-5 flex flex-col items-center justify-center bg-slate-900 dark:bg-slate-800 text-white p-6 rounded-2xl relative overflow-hidden border border-slate-800 dark:border-slate-700 shadow-inner">
+                                <div class="absolute -right-10 -top-10 w-40 h-40 bg-brand-500/20 rounded-full blur-2xl"></div>
+                                <i class="fa-solid fa-router text-7xl text-brand-400 my-4"></i>
+                                <div class="text-center">
+                                    <span class="text-xs text-slate-400 block">TP-Link Archer BE230</span>
+                                    <span class="text-lg font-bold text-white">Dual-Band Wi-Fi 7</span>
+                                </div>
+
+                                <div class="w-full grid grid-cols-2 gap-2 mt-6 text-center text-xs">
+                                    <div class="bg-slate-800/80 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-700">
+                                        <span class="text-slate-400 block text-[10px]">WAN Speed</span>
+                                        <span class="font-bold text-emerald-400">2.5 Gbps</span>
+                                    </div>
+                                    <div class="bg-slate-800/80 dark:bg-slate-900/80 p-2 rounded-lg border border-slate-700">
+                                        <span class="text-slate-400 block text-[10px]">App Support</span>
+                                        <span class="font-bold text-brand-300">Tether App</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Router Pictures -->
+                            <div class="md:col-span-6 flex flex-col items-center justify-center dark:bg-slate-800 text-white p-6 rounded-2xl relative overflow-hidden border shadow-inner">
+                                <img src="IT01_Images/pic1.jpg">
+                            </div>
+
+                            <!-- Router Pictures -->
+                            <div class="md:col-span-6 flex flex-col items-center justify-center dark:bg-slate-800 text-white p-6 rounded-2xl relative overflow-hidden border shadow-inner">
+                                <img src="IT01_Images/pic2.jpg">
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 5: Wall Mounting Installation -->
+                <section id="installation" class="space-y-6">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Physical Installation & Mounting</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Placement strategy and wall mounting workflow.</p>
+                    </div>
+
+                    <!-- Location Tip Notice -->
+                    <div class="bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60 rounded-2xl p-5 flex items-start gap-4">
+                        <div class="p-3 bg-sky-500 text-white rounded-xl text-lg flex-shrink-0">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div class="text-sm text-sky-900 dark:text-sky-200">
+                            <h4 class="font-bold mb-1">Placement Strategy & Demarcation Point</h4>
+                            <p class="leading-relaxed">
+                                Mounted in the living room near the main door, which serves as the internet service provider's demarcation point. 
+                                <strong class="text-sky-950 dark:text-sky-100">Crucial Rule:</strong> Avoid mounting near reflective surfaces (mirrors, metal) or directly next to high-voltage electrical wiring to prevent wireless signal degradation or RF interference.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Installation Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <!-- Step 1 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 relative flex flex-col justify-between">
+                            <div>
+                                <span class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center text-sm mb-4">1</span>
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Measure Mounting Holes</h3>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Measure the exact distance between the two integrated mounting keyholes located on the router chassis backplate.
+                                </p>
+                            </div>
+                            <img src="IT01_Images/pic3.jpg">
+                            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                                <i class="fa-solid fa-ruler-horizontal"></i>Chassis backplate check
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 relative flex flex-col justify-between">
+                            <div>
+                                <span class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center text-sm mb-4">2</span>
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Install Wall Anchors & Screws</h3>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Mark the wall using a level line, insert drywall anchors, and drive 2 screws leaving appropriate clearance for the keyhole hooks.
+                                </p>
+                            </div>
+                            <img src="IT01_Images/pic4.jpg">
+                            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                                <i class="fa-solid fa-screwdriver"></i> Anchor installation
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 relative flex flex-col justify-between">
+                            <div>
+                                <span class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center text-sm mb-4">3</span>
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Mount & Connect Cables</h3>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Hang the router securely onto the screws. Plug in the power adapter and connect the WAN Ethernet cable from your modem into the 2.5G WAN port.
+                                </p>
+                            </div>
+                            <img src="IT01_Images/pic5.jpg">
+                            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                                <i class="fa-solid fa-plug"></i> Power & WAN connected
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 6: Configuration Setup -->
+                <section id="setup" class="space-y-6">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Router Configuration & Setup</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Choose between simple mobile app setup or advanced web administration GUI.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
+                        <!-- Interactive Method Tabs Header -->
+                        <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 p-2 gap-2">
+                            <button id="btn-method-1" onclick="switchTab('method-1')" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm text-brand-700 dark:text-brand-300 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 transition-all">
+                                <i class="fa-solid fa-mobile-screen-button"></i> Method 1: Mobile App (Tether)
+                            </button>
+                            <button id="btn-method-2" onclick="switchTab('method-2')" class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm text-slate-600 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-800/50 flex items-center justify-center gap-2 transition-all">
+                                <i class="fa-solid fa-desktop"></i> Method 2: Web Interface (192.168.0.1)
+                            </button>
+                        </div>
+
+                        <!-- Tab Content 1: Mobile App -->
+                        <div id="tab-method-1" class="p-6 sm:p-8 space-y-6">
+                            <div class="flex items-center gap-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800/60 p-4 rounded-xl text-emerald-900 dark:text-emerald-200 text-sm">
+                                <i class="fa-solid fa-thumbs-up text-2xl text-emerald-600 dark:text-emerald-400"></i>
+                                <div>
+                                    <strong class="block font-bold">Recommended for beginners</strong>
+                                    Quick step-by-step mobile pairing via QR code or automatic broadcast detection.
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700/80">
+                                    <span class="text-xs font-bold text-brand-600 dark:text-brand-400 block mb-1">Step 1</span>
+                                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">Download App</h4>
+                                    <p class="text-xs text-slate-600 dark:text-slate-300">Download the <strong>TP-Link Tether</strong> app from the Google Play Store or Apple App Store.</p>
+                                </div>
+
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700/80">
+                                    <span class="text-xs font-bold text-brand-600 dark:text-brand-400 block mb-1">Step 2</span>
+                                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">Power & Connect</h4>
+                                    <p class="text-xs text-slate-600 dark:text-slate-300">Power on the router and wait for the front status LEDs to remain solid and stable.</p>
+                                </div>
+
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700/80">
+                                    <span class="text-xs font-bold text-brand-600 dark:text-brand-400 block mb-1">Step 3</span>
+                                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">Scan QR Code</h4>
+                                    <p class="text-xs text-slate-600 dark:text-slate-300">Open Tether, select 'Add Router', and scan the default Wi-Fi QR code printed on the bottom label. Then basically just following the instruction.</p>
+                                </div>
+
+                                <img src="IT01_Images/pic6.jpg" width="80%">
+                                <img src="IT01_Images/pic7.jpg" width="80%">
+                                <img src="IT01_Images/pic8.jpg" width="80%">
+                            </div>
+                        </div>
+
+                        <!-- Tab Content 2: Web Interface -->
+                        <div id="tab-method-2" class="p-6 sm:p-8 space-y-6 hidden">
+                            <div class="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/60 p-4 rounded-xl text-indigo-900 dark:text-indigo-200 text-sm flex items-start gap-3">
+                                <i class="fa-solid fa-sliders text-xl text-indigo-600 dark:text-indigo-400 mt-0.5"></i>
+                                <div>
+                                    <strong class="block font-bold">Advanced Management Interface</strong>
+                                    Provides granular control over network security, channel width, MLO settings, and DHCP rules.
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- Step 1 -->
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-start gap-4">
+                                    <span class="w-7 h-7 rounded-lg bg-brand-600 dark:bg-brand-500 text-white font-bold flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-white text-sm">Connect to Default SSID</h4>
+                                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Connect your client PC or phone to the default factory Wi-Fi SSID and password printed on the router label.</p>
+
+                                        <img src="IT01_Images/pic14.jpg" width="50%">
+                                    </div>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-start gap-4">
+                                    <span class="w-7 h-7 rounded-lg bg-brand-600 dark:bg-brand-500 text-white font-bold flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-white text-sm">Navigate to Gateway IP</h4>
+                                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                                            Open your browser and navigate to <code class="px-2 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded font-mono text-xs">http://192.168.0.1</code>. Then, enter the default WIFI password (everytime you log it will ask for the password). You can also create a TP-Link ID for management, then next time you don't need to enter the WIFI password which is also more secure.
+                                        </p>
+                                        <img src="IT01_Images/pic11.png" width="30%">
+                                    </div>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-start gap-4">
+                                    <span class="w-7 h-7 rounded-lg bg-brand-600 dark:bg-brand-500 text-white font-bold flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                                    <div class="w-full">
+                                        <h4 class="font-bold text-slate-900 dark:text-white text-sm">Configure Wireless Settings & Security</h4>
+                                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 mb-3">Navigate to the <strong>Wireless</strong> tab to update your network settings: Now you rename your WIFI, password as well as password security encryption type. If you want to hide your WIFI, you can just need to check "Hide SSID", but next time if a new device want to connect to your WIFI, so they have to enter the your WIFI manually. For other setting just leave it default.</p>
+                                        
+                                        <img src="IT01_Images/pic12.png" width="80%">
+                                        <img src="IT01_Images/pic13.png" width="80%">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 7: Testing & Verification -->
+                <section id="results" class="space-y-6">
+                    <div class="border-l-4 border-brand-600 dark:border-brand-500 pl-4">
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Testing & Verification</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Real-world speed benchmark comparisons before and after upgrading.</p>
+                    </div>
+
+                    <!-- Highlight Stat Card -->
+                    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-800 rounded-2xl p-6 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="space-y-1 text-center sm:text-left">
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-100">Upgrade Verdict</span>
+                            <h3 class="text-2xl font-black">+105.6 Mbps Download Gain</h3>
+                            <p class="text-xs text-emerald-100 max-w-xl">
+                                Significant speed enhancement achieved on identical ISP baseline. The upgrade eliminated local airtime congestion and increased peak throughput by over 25%.
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-xl border border-white/20 text-center flex-shrink-0">
+                            <span class="text-xs text-emerald-100 block">Performance Increase</span>
+                            <span class="text-3xl font-black text-white">+25.2%</span>
+                        </div>
+                    </div>
+
+                    <!-- Speed Benchmark Comparison Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Old Router Card -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden transition-colors duration-300">
+                            <div class="absolute top-0 right-0 px-4 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs rounded-bl-xl border-l border-b border-slate-200 dark:border-slate-700">
+                                Legacy Baseline
+                            </div>
+
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-wifi"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 dark:text-white">Old Router</h4>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400">Wi-Fi 5 Technology (802.11ac)</span>
+                                </div>
+                            </div>
+                            
+                            <img src="IT01_Images/pic9.jpg"  width="80%">
+                        </div>
+
+                        <!-- New Wi-Fi 7 Router Card -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border-2 border-brand-500 dark:border-brand-400 shadow-md relative overflow-hidden transition-colors duration-300">
+                            <div class="absolute top-0 right-0 px-4 py-1 bg-brand-600 text-white font-bold text-xs rounded-bl-xl shadow-sm">
+                                Wi-Fi 7 Upgraded
+                            </div>
+
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 dark:text-white">New TP-Link Archer BE230</h4>
+                                    <span class="text-xs text-brand-600 dark:text-brand-400 font-semibold">Wi-Fi 7 Technology (802.11be)</span>
+                                </div>
+                            </div>
+
+                            <img src="IT01_Images/pic10.jpg"  width="80%">
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Conclusion Footer Card -->
+                <section class="bg-slate-900 dark:bg-slate-900/90 text-slate-300 border border-transparent dark:border-slate-800 rounded-2xl p-6 sm:p-8 text-center space-y-3">
+                    <div class="w-12 h-12 rounded-full bg-slate-800 text-brand-400 flex items-center justify-center mx-auto text-xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Project Complete & Verified</h3>
+                    <p class="text-sm max-w-xl mx-auto text-slate-400">
+                        The TP-Link Archer BE230 installation successfully delivered improved home Wi-Fi speeds, superior airtime efficiency, and robust multi-device capacity for a total hardware investment of $77.
+                    </p>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts for Dark Mode & Tab Switching -->
+    <script>
+        // Dark Mode Toggle Logic
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleDarkIcon.classList.add('hidden');
+                themeToggleLightIcon.classList.remove('hidden');
+            } else {
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+        }
+
+        // Initialize icons on load
+        updateIcons();
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateIcons();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            const tab1 = document.getElementById('tab-method-1');
+            const tab2 = document.getElementById('tab-method-2');
+            const btn1 = document.getElementById('btn-method-1');
+            const btn2 = document.getElementById('btn-method-2');
+
+            if (tabId === 'method-1') {
+                tab1.classList.remove('hidden');
+                tab2.classList.add('hidden');
+                
+                btn1.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm text-brand-700 dark:text-brand-300 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 transition-all';
+                btn2.className = 'flex-1 py-3 px-4 rounded-xl font-semibold text-sm text-slate-600 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-800/50 flex items-center justify-center gap-2 transition-all';
+            } else {
+                tab1.classList.add('hidden');
+                tab2.classList.remove('hidden');
+
+                btn2.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm text-brand-700 dark:text-brand-300 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 transition-all';
+                btn1.className = 'flex-1 py-3 px-4 rounded-xl font-semibold text-sm text-slate-600 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-800/50 flex items-center justify-center gap-2 transition-all';
+            }
+        }
+    </script>
+</body>
+</html>
