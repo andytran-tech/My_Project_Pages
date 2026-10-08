@@ -4,20 +4,20 @@
 
 // Comprehensive Project Data Object for Modal Dynamic Popups
 const projectDetails = {
-    'pc1': {
+    'PCH01': {
         category: 'PC / COMPUTER HARDWARE',
-        title: 'High-Performance Liquid Cooling Thermal Benchmarking',
-        tags: ['Custom Loops', 'Thermal Testing', 'Overclocking', 'Stress Benchmarks'],
+        title: 'Complete Guide: Replace a Laptop Battery',
+        tags: ['Disassembly method', 'Finding parts', 'Installing procedure'],
         content: `
-            <p class="mb-3">Detailed walkthrough of assembling, pressure testing, and thermal logging for high-end custom liquid-cooled (water loop) gaming and workstation PCs.</p>
+            <p class="mb-3">Extend your laptop's lifecycle with an easy step-by-step battery replacement walkthrough using basic tools.</p>
             <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Technical Key Steps:</h4>
             <ul class="list-disc pl-5 space-y-1 mb-4 text-xs font-mono">
-                <li>Bending acrylic/PETG hard tubing with heat guns and Mandrel tools.</li>
-                <li>Air pressure leak testing at 0.5 bar for 15 minutes before coolant filling.</li>
-                <li>Evaluating liquid thermal delta across CPU/GPU blocks under FurMark and Prime95 stress workloads.</li>
+                <li>Finding correct battery for a laptop.</li>
+                <li>Step-by-Step walkthrough Disassembly.</li>
+                <li>Verify correcting battery type and installing procedure.</li>
             </ul>
             <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs text-cyan-400">
-                // BENCHMARK RESULT: Maximum load delta kept under 18°C above ambient temperature.
+                // VERIFY RESULT: Successfully restored battery performance.
             </div>
         `
     },
@@ -52,58 +52,60 @@ const projectDetails = {
             </ul>
         `
     },
-    'el1': {
+    'EES01': {
         category: 'ELECTRONICS / EMBEDDED',
-        title: 'ESP32 Wireless Gas & Environment Sensor Telemetry',
-        tags: ['ESP32', 'C++', 'MQ Sensors', 'MQTT Telemetry'],
+        title: 'Smart Infortainment Upgrading for Toyota Prius 3rd Gen',
+        tags: ['Wiring Instruction', 'Oem Backup Camera Setting', 'Disassembly/Installing procedure','Android Auto/Apple Carplay'],
         content: `
-            <p class="mb-3">Designing a standalone sensor circuit that logs gas levels and environmental parameters wirelessly to a home server dashboard.</p>
+            <p class="mb-3">Transform your Toyota Prius 3rd Generation (2010–2015) with modern Android Auto, Apple CarPlay, and updated multimedia capabilities.</p>
             <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Technical Implementation:</h4>
             <ul class="list-disc pl-5 space-y-1 mb-4 text-xs font-mono">
-                <li>Wiring MQ series gas sensors with load resistors to ESP32 analog pins.</li>
-                <li>Writing asynchronous C++ code utilizing Wi-Fi Manager and MQTT protocols.</li>
-                <li>Calibrating analog voltage thresholds to eliminate baseline noise.</li>
+                <li>Disassembly and Installing unit procedure.</li>
+                <li>Wiring Instruction for the unit.</li>
+                <li>Setting & Retain the OEM Backup Camera.</li>
             </ul>
         `
     },
-    'el2': {
+    'EES02': {
         category: 'ELECTRONICS / EMBEDDED',
-        title: 'Logic Gate IC 74HC08 Analysis & Circuit Tinkercad Modeling',
-        tags: ['Logic Gates', 'Tinkercad', 'Digital Circuits', 'Breadboard'],
+        title: 'Automatic Light-Sensing Switch with LDR & MOSFET',
+        tags: ['Voltage Divider', 'Photoresistor(LDR)', 'N-Channel MOSFET', 'Simulation'],
         content: `
-            <p class="mb-3">Educational hardware analysis of the 74HC08 Quad 2-Input AND Gate IC using virtual simulations and physical breadboard setups.</p>
-            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Key Highlights:</h4>
+            <p class="mb-3">Build a basic high-efficiency automatic night light using an N-Channel MOSFET and Photoresistor (LDR) for minimal standby power consumption.</p>
+            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Technical Highlights:</h4>
             <ul class="list-disc pl-5 space-y-1 mb-4 text-xs font-mono">
-                <li>Designing Tinkercad schematics to verify IC voltage output logic levels under varying load states.</li>
-                <li>Implementing 10k pull-down resistors to prevent floating gate behavior on digital inputs.</li>
+                <li>Photoresistor or Light Dependent Resistor (LDR) to detect ambient light.</li>
+                <li>Voltage divider to translate resistance changes into a dynamic control voltage</li>
+                <li>N-Channel MOSFET to automatically toggle an LED load ON or OFF.</li>
             </ul>
         `
     },
-    'el3': {
+    'EES03': {
         category: 'ELECTRONICS / EMBEDDED',
-        title: 'Variable Buck DC-DC Converter & MOSFET Switch Design',
-        tags: ['Power Electronics', 'MOSFETs', 'Circuit Analysis', 'Kirchhoff Laws'],
+        title: 'Motion-Activated 120V Light Control System',
+        tags: ['N-Channel Transistor', 'Relay Switching', 'PIR Sensor', 'Plyback Diode'],
         content: `
-            <p class="mb-3">Hands-on application of electrical engineering principles: designing a step-down buck converter circuit driven by N-Channel MOSFETs.</p>
-            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Calculations & Circuit Design:</h4>
+            <p class="mb-3">An isolated hybrid control circuit engineered to driver a 120V AC incandescent/LED lamp using low-power 4.5V DC passive infrared (PIR) sensing logic, transistor switching driver stage, inductive transient flyback suppression, and electromagnetic relay decoupling.</p>
+            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Technical Highlights:</h4>
             <ul class="list-disc pl-5 space-y-1 mb-4 text-xs font-mono">
-                <li>Calculating duty cycle parameters: V_out = D * V_in.</li>
-                <li>Selecting Flyback Diodes and Inductor values to minimize ripple voltage.</li>
-                <li>Verifying Kirchhoff’s Current and Voltage Laws across physical circuit branches.</li>
+                <li>PIR Sensor monitors thermal radiation changes or motion change.</li>
+                <li>NPN Transistor operate as a low-side electronic switch to energize the 5v relay coil.</li>
+                <li>Electromechanical relay contact physically close, compeleting 120V AC circuit path.</li>
+                <li>Flyback Diode safely redirects and dissipates this reverse transient energy</li>
             </ul>
         `
     },
-    'net1': {
+    'IT01': {
         category: 'IT / NETWORKING',
-        title: 'Segmented VLAN & Isolated Hardware Test Lab Network',
-        tags: ['VLANs', 'Managed Switch', 'Network Isolation', 'Firewall'],
+        title: 'Upgrading & Basic Setting Up a SOHO Router Wi-Fi',
+        tags: ['Wi-Fi7(802.11be)', 'Installing Instruction', 'WIFI Management'],
         content: `
-            <p class="mb-3">Architecting a segregated network environment using 802.1Q tagged VLANs to isolate suspect client systems undergoing hardware testing or malware analysis.</p>
-            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Network Architecture:</h4>
+            <p class="mb-3">A complete step-by-step documentation detailing the installation, wall mounting, mobile/web configuration, and performance verification of a next-generation Wi-Fi 7 small office/home office router.</p>
+            <h4 class="text-sm font-bold text-slate-100 font-mono mb-2">Technical Highlights:</h4>
             <ul class="list-disc pl-5 space-y-1 mb-4 text-xs font-mono">
-                <li>VLAN 10: Internal Management & Secure Storage.</li>
-                <li>VLAN 20: Isolated Hardware Testing Bench (No local broadcast routing).</li>
-                <li>Configuring pfSense firewall rules to block inter-VLAN communication.</li>
+                <li>Next-generation Wi-Fi7 technology.</li>
+                <li>Wiring and Installing a SOHO router device effectively.</li>
+                <li>Setting and Managing Wi-Fi network.</li>
             </ul>
         `
     },
